@@ -158,7 +158,7 @@ function SignInForm() {
 
 // ── Sign Up form ─────────────────────────────────────────────────────────────
 
-function SignUpForm() {
+function SignUpForm({ onSignedUp }: { onSignedUp?: () => void }) {
   const [showPw, setShowPw]      = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
 
@@ -219,7 +219,7 @@ function SignUpForm() {
         </label>
 
         {/* Create Account CTA */}
-        <button className="relative bg-[#111] text-[#f5f1ea] font-semibold text-[16px] py-4 rounded-[12px] w-full shadow-[0px_10px_15px_-3px_rgba(0,0,0,0.1),0px_4px_6px_-4px_rgba(0,0,0,0.1)] hover:bg-[#2a2a2a] transition-colors">
+        <button onClick={onSignedUp} className="relative bg-[#111] text-[#f5f1ea] font-semibold text-[16px] py-4 rounded-[12px] w-full shadow-[0px_10px_15px_-3px_rgba(0,0,0,0.1),0px_4px_6px_-4px_rgba(0,0,0,0.1)] hover:bg-[#2a2a2a] transition-colors">
           Create Account
         </button>
       </div>
@@ -388,9 +388,10 @@ type Tab = 'signin' | 'signup';
 interface AuthPageProps {
   initialTab?: Tab;
   onBack: () => void;
+  onSignedUp?: () => void;
 }
 
-export default function AuthPage({ initialTab = 'signin', onBack }: AuthPageProps) {
+export default function AuthPage({ initialTab = 'signin', onBack, onSignedUp }: AuthPageProps) {
   const [tab, setTab] = useState<Tab>(initialTab);
 
   return (
@@ -398,7 +399,7 @@ export default function AuthPage({ initialTab = 'signin', onBack }: AuthPageProp
       <div className="mx-auto max-w-[375px] w-full">
 
         {/* ── Header ── */}
-        <header className="bg-[#f5f1ea] px-4 py-4 flex items-center justify-between">
+        <header className="sticky top-0 z-50 bg-[#f5f1ea] px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="bg-[#111] rounded-[12px] w-9 h-9 flex items-center justify-center shrink-0">
               <img src={logoIcon} alt="TressIQ logo" className="w-4 h-4 object-contain" />
@@ -442,7 +443,7 @@ export default function AuthPage({ initialTab = 'signin', onBack }: AuthPageProp
 
         {/* ── Form area ── */}
         <div className="px-4 pt-8 pb-4">
-          {tab === 'signin' ? <SignInForm /> : <SignUpForm />}
+          {tab === 'signin' ? <SignInForm /> : <SignUpForm onSignedUp={onSignedUp} />}
         </div>
 
         {/* ── Why create an account ── */}

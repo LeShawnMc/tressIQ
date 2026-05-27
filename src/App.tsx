@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import AuthPage from './pages/AuthPage';
+import OnboardingStep1Page from './pages/OnboardingStep1Page';
 
 // Asset URLs from Figma MCP
 const logoIcon = "https://www.figma.com/api/mcp/asset/35c39e70-3b87-41f5-88db-5a42f48854f2";
@@ -80,7 +81,7 @@ function ProgressBar({ value, max = 10 }: { value: number; max?: number }) {
 
 function Header() {
   return (
-    <header className="bg-[#f5f1ea] px-4 py-4 flex items-center justify-between">
+    <header className="sticky top-0 z-50 bg-[#f5f1ea] px-4 py-4 flex items-center justify-between">
       <div className="flex items-center gap-2">
         <div className="bg-[#111] rounded-[12px] w-9 h-9 flex items-center justify-center shrink-0">
           <img src={logoIcon} alt="TressIQ logo" className="w-4 h-4 object-contain" />
@@ -675,7 +676,7 @@ function Footer() {
 }
 
 export default function App() {
-  const [page, setPage] = useState<'landing' | 'auth'>('landing');
+  const [page, setPage] = useState<'landing' | 'auth' | 'onboarding1'>('landing');
   const [initialTab, setInitialTab] = useState<'signin' | 'signup'>('signup');
 
   if (page === 'auth') {
@@ -683,6 +684,17 @@ export default function App() {
       <AuthPage
         initialTab={initialTab}
         onBack={() => setPage('landing')}
+        onSignedUp={() => setPage('onboarding1')}
+      />
+    );
+  }
+
+  if (page === 'onboarding1') {
+    return (
+      <OnboardingStep1Page
+        onBack={() => setPage('auth')}
+        onNext={() => setPage('landing')}
+        onSkip={() => setPage('landing')}
       />
     );
   }
