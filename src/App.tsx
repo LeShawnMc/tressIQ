@@ -1,3 +1,6 @@
+import { useState } from 'react';
+import AuthPage from './pages/AuthPage';
+
 // Asset URLs from Figma MCP
 const logoIcon = "https://www.figma.com/api/mcp/asset/35c39e70-3b87-41f5-88db-5a42f48854f2";
 const menuIcon = "https://www.figma.com/api/mcp/asset/c50bbeb5-a1a7-4821-859e-474e27f0ca49";
@@ -91,7 +94,7 @@ function Header() {
   );
 }
 
-function HeroSection() {
+function HeroSection({ onSignUp, onSignIn }: { onSignUp: () => void; onSignIn: () => void }) {
   return (
     <section className="bg-[#f5f1ea] px-4 pt-8 pb-4 flex flex-col items-center gap-3">
       {/* Logo circle */}
@@ -113,10 +116,10 @@ function HeroSection() {
 
       {/* Buttons */}
       <div className="flex flex-col gap-3 w-full pt-5">
-        <button className="relative bg-[#111] text-[#f5f1ea] font-medium text-[16px] py-4 rounded-[16px] w-full shadow-[0px_10px_15px_-3px_rgba(0,0,0,0.1),0px_4px_6px_-4px_rgba(0,0,0,0.1)]">
+        <button onClick={onSignUp} className="relative bg-[#111] text-[#f5f1ea] font-medium text-[16px] py-4 rounded-[16px] w-full shadow-[0px_10px_15px_-3px_rgba(0,0,0,0.1),0px_4px_6px_-4px_rgba(0,0,0,0.1)]">
           Sign Up Free
         </button>
-        <button className="relative bg-[#c8a46a] text-[#111] font-medium text-[16px] py-4 rounded-[16px] w-full shadow-[0px_4px_6px_-1px_rgba(0,0,0,0.1),0px_2px_4px_-2px_rgba(0,0,0,0.1)]">
+        <button onClick={onSignIn} className="relative bg-[#c8a46a] text-[#111] font-medium text-[16px] py-4 rounded-[16px] w-full shadow-[0px_4px_6px_-1px_rgba(0,0,0,0.1),0px_2px_4px_-2px_rgba(0,0,0,0.1)]">
           Sign In
         </button>
         <button className="flex items-center justify-center gap-2 py-3 w-full">
@@ -553,7 +556,7 @@ function TestimonialsSection() {
   );
 }
 
-function CTASection() {
+function CTASection({ onSignUp, onSignIn }: { onSignUp: () => void; onSignIn: () => void }) {
   return (
     <section className="bg-[#f5f1ea] px-4 py-12">
       {/* Main CTA card */}
@@ -570,10 +573,10 @@ function CTASection() {
         </p>
 
         <div className="flex flex-col gap-3 w-full mt-2">
-          <button className="relative bg-[#c8a46a] text-[#111] font-semibold text-[16px] py-4 rounded-[16px] w-full shadow-[0px_10px_15px_-3px_rgba(0,0,0,0.1),0px_4px_6px_-4px_rgba(0,0,0,0.1)]">
+          <button onClick={onSignUp} className="relative bg-[#c8a46a] text-[#111] font-semibold text-[16px] py-4 rounded-[16px] w-full shadow-[0px_10px_15px_-3px_rgba(0,0,0,0.1),0px_4px_6px_-4px_rgba(0,0,0,0.1)]">
             Create Free Account
           </button>
-          <button className="border-2 border-[#c8a46a] text-[#f5f1ea] font-semibold text-[16px] py-[18px] rounded-[16px] w-full">
+          <button onClick={onSignIn} className="border-2 border-[#c8a46a] text-[#f5f1ea] font-semibold text-[16px] py-[18px] rounded-[16px] w-full">
             Sign In
           </button>
         </div>
@@ -672,11 +675,26 @@ function Footer() {
 }
 
 export default function App() {
+  const [page, setPage] = useState<'landing' | 'auth'>('landing');
+  const [initialTab, setInitialTab] = useState<'signin' | 'signup'>('signup');
+
+  if (page === 'auth') {
+    return (
+      <AuthPage
+        initialTab={initialTab}
+        onBack={() => setPage('landing')}
+      />
+    );
+  }
+
+  const goSignUp = () => { setInitialTab('signup'); setPage('auth'); };
+  const goSignIn = () => { setInitialTab('signin'); setPage('auth'); };
+
   return (
     <div className="min-h-screen bg-[#f5f1ea]">
       <div className="mx-auto max-w-[375px] w-full">
         <Header />
-        <HeroSection />
+        <HeroSection onSignUp={goSignUp} onSignIn={goSignIn} />
         <WhySection />
         <FeaturesSection />
         <CommunityBanner />
@@ -686,7 +704,7 @@ export default function App() {
         <HowItWorksSection />
         <PremiumSection />
         <TestimonialsSection />
-        <CTASection />
+        <CTASection onSignUp={goSignUp} onSignIn={goSignIn} />
         <Footer />
       </div>
     </div>
