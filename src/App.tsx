@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import AuthPage from './pages/AuthPage';
 import OnboardingStep1Page from './pages/OnboardingStep1Page';
+import OnboardingStep2Page from './pages/OnboardingStep2Page';
 
 // Asset URLs from Figma MCP
 const logoIcon = "https://www.figma.com/api/mcp/asset/35c39e70-3b87-41f5-88db-5a42f48854f2";
@@ -676,7 +677,7 @@ function Footer() {
 }
 
 export default function App() {
-  const [page, setPage] = useState<'landing' | 'auth' | 'onboarding1'>('landing');
+  const [page, setPage] = useState<'landing' | 'auth' | 'onboarding1' | 'onboarding2'>('landing');
   const [initialTab, setInitialTab] = useState<'signin' | 'signup'>('signup');
 
   if (page === 'auth') {
@@ -693,7 +694,17 @@ export default function App() {
     return (
       <OnboardingStep1Page
         onBack={() => setPage('auth')}
-        onNext={() => setPage('landing')}
+        onNext={() => setPage('onboarding2')}
+        onSkip={() => setPage('landing')}
+      />
+    );
+  }
+
+  if (page === 'onboarding2') {
+    return (
+      <OnboardingStep2Page
+        onBack={() => setPage('onboarding1')}
+        onFinish={() => setPage('landing')}
         onSkip={() => setPage('landing')}
       />
     );
